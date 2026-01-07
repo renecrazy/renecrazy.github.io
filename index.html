@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Taxi Emden RP</title>
+
+<style>
+body { font-family: Arial; background:#f2f2f2; margin:0; }
+header { background:#ffcc00; padding:15px; text-align:center; font-size:22px; font-weight:bold; }
+nav { display:flex; background:#333; }
+nav button { flex:1; color:white; background:none; border:none; padding:12px; }
+.box { display:none; background:white; margin:10px; padding:15px; border-radius:10px; }
+input, select { width:100%; padding:10px; margin-bottom:10px; }
+button.action { background:#ffcc00; border:none; padding:12px; width:100%; font-weight:bold; border-radius:5px; }
+.order { background:#eee; padding:10px; margin-bottom:10px; border-radius:5px; }
+.small { font-size:14px; color:#333; }
+</style>
+</head>
+
+<body>
+
+<header>🚕 Taxi Emden RP</header>
+
+<nav>
+<button onclick="show('taxi')">Taxi</button>
+<button onclick="show('license')">Führerschein</button>
+<button onclick="show('login')">Fahrer</button>
+</nav>
+
+<!-- TAXI -->
+<div class="box" id="taxi">
+<h3>Taxi buchen</h3>
+
+<div class="order">
+<b>Preise:</b><br>
+Normal: 50€<br>
+Express: 80€<br>
+Event: 120€
+</div>
+
+<input id="name" placeholder="Roblox Name">
+<input id="from" placeholder="Abholort">
+<input id="to" placeholder="Zielort">
+
+<select id="type">
+<option>Normal</option>
+<option>Express</option>
+<option>Event</option>
+</select>
+
+<select id="pay">
+<option>Barzahlung</option>
+<option>Kartenzahlung</option>
+</select>
+
+<button class="action" onclick="addOrder()">Taxi anfordern</button>
+</div>
+
+<!-- FÜHRERSCHEIN -->
+<div class="box" id="license">
+<h3>🪪 Führerschein</h3>
+<p class="small">Theorieprüfung ab 4/5 richtig bestanden</p>
+<button class="action" onclick="alert('Prüfung starten (wie zuvor)')">Prüfung starten</button>
+</div>
+
+<!-- FAHRER -->
+<div class="box" id="login">
+<h3>👨‍✈️ Fahrer Dashboard</h3>
+
+<button class="action" onclick="showOrders()">Aufträge anzeigen</button>
+
+<div id="orders"></div>
+</div>
+
+<script>
+let orders = [];
+
+function show(id){
+    document.querySelectorAll('.box').forEach(b=>b.style.display="none");
+    document.getElementById(id).style.display="block";
+}
+
+function addOrder(){
+    let order = {
+        name: name.value,
+        from: from.value,
+        to: to.value,
+        type: type.value,
+        pay: pay.value,
+        status: "Offen"
+    };
+    orders.push(order);
+    alert("Taxi-Anfrage gesendet!");
+}
+
+function showOrders(){
+    let list = document.getElementById("orders");
+    list.innerHTML = "";
+    orders.forEach((o,i)=>{
+        list.innerHTML += `
+        <div class="order">
+        <b>${o.name}</b><br>
+        ${o.from} ➜ ${o.to}<br>
+        Fahrt: ${o.type}<br>
+        Zahlung: ${o.pay}<br>
+        Status: ${o.status}<br>
+        <button onclick="take(${i})">Annehmen</button>
+        <button onclick="pay(${i})">Bezahlt</button>
+        </div>`;
+    });
+}
+
+function take(i){
+    orders[i].status = "Angenommen";
+    showOrders();
+}
+
+function pay(i){
+    orders[i].status = "Bezahlt";
+    showOrders();
+}
+</script>
+
+</body>
+</html>
